@@ -153,9 +153,8 @@ export default function HeroScene({ animate }: { animate: boolean }) {
     }
     function onPointerMove(event: PointerEvent) {
       if (!isVisible || !animateRef.current || event.pointerType === 'touch') return;
-      const bounds = container!.getBoundingClientRect();
       mouseX = THREE.MathUtils.clamp((event.clientX / window.innerWidth - 0.5) * 2, -1, 1);
-      mouseY = THREE.MathUtils.clamp(((event.clientY - bounds.top) / bounds.height - 0.5) * 2, -1, 1);
+      mouseY = THREE.MathUtils.clamp((event.clientY / window.innerHeight - 0.5) * 2, -1, 1);
     }
     function onVisibilityChange() { isPageVisible = !document.hidden; }
     const visibilityObserver = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }, { threshold: 0 });

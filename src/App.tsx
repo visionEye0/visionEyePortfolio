@@ -14,27 +14,27 @@ import TechStack from "./components/TechStack";
 const projects = [
   {
     number: "01",
-    title: "Hush House",
-    type: "Brand site / Commerce",
-    year: "2025",
+    title: "Ashan AI",
+    type: "AI Assistant / Cross-platform",
+    year: "2024",
     color: "#d9ff54",
-    note: "Immersive storefront for a quiet-living studio.",
+    note: "Multimodal AI assistant providing real-time support in 10+ regional languages.",
   },
   {
     number: "02",
-    title: "Tandem",
-    type: "Product / AI workspace",
-    year: "2025",
+    title: "Delulu-Dex",
+    type: "Decentralized Exchange / Web3",
+    year: "2023",
     color: "#ae8dff",
-    note: "A collaborative canvas for sharper product decisions.",
+    note: "Automated market maker DEX built from scratch using Solidity.",
   },
   {
     number: "03",
-    title: "Orbital",
-    type: "Data story / WebGL",
-    year: "2024",
+    title: "Vendor Heatmap",
+    type: "Data Analytics / MapLibre",
+    year: "2025",
     color: "#ff8c6a",
-    note: "A living view of objects moving above our heads.",
+    note: "Real-time order analytics and vendor heatmap system for high-demand zones.",
   },
 ];
 
@@ -73,7 +73,7 @@ export default function App() {
             aria-label="Back to top"
           >
             <span className="inline-block h-2 w-2 rounded-full bg-[#d9ff54] shadow-[0_0_18px_#d9ff54]" />
-            JK / 2025
+            PK / 2025
           </button>
 
           <div className="hidden items-center gap-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 md:flex">
@@ -119,7 +119,7 @@ export default function App() {
             transition={{ delay: 0.25, duration: 0.7 }}
             className="mb-5 max-w-sm font-mono text-[10px] uppercase tracking-[0.18em] text-[#d9ff54] sm:mb-7"
           >
-            Independent developer / based in New York
+            Full-Stack Developer / based in Calicut, Kerala
           </motion.p>
 
           <motion.h1
@@ -128,8 +128,8 @@ export default function App() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="font-display max-w-[1200px] text-[clamp(4.4rem,14.3vw,14.4rem)] font-medium leading-[0.75] tracking-[-0.075em]"
           >
-            JULES<br />
-            <span className="pl-[0.47em] text-[#d9ff54]">KIM</span>
+            PRANAV<br />
+            <span className="pl-[0.47em] text-[#d9ff54]">KRISHNA</span>
           </motion.h1>
 
           <motion.div
@@ -148,7 +148,7 @@ export default function App() {
                   <ArrowDownRight size={17} strokeWidth={2.3} />
                 </span>
               </button>
-              <a href="mailto:hello@juleskim.dev" className="text-link">Let&apos;s talk</a>
+              <a href="mailto:pranavsayshii@gmail.com" className="text-link">Let&apos;s talk</a>
             </div>
           </motion.div>
         </div>
@@ -170,7 +170,7 @@ export default function App() {
             </motion.h2>
             <div className="mt-12 grid gap-9 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
               <p className="max-w-lg text-lg leading-relaxed text-white/70">
-                I&apos;m an independent developer who partners with teams that care about a sharp point of view. I build brand worlds, product moments, and digital tools that people want to return to.
+                I&apos;m a Full-Stack Developer specializing in high-performance applications, AI-powered tools, and automated workflows. I engineer solutions that accelerate business velocity and enhance user experiences.
               </p>
               <div className="space-y-4">
                 <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">Working with</p>
@@ -259,15 +259,15 @@ export default function App() {
             <span className="pl-[0.32em]">one in mind?</span>
           </motion.h2>
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5 sm:mt-14">
-            <a className="contact-link" href="mailto:hello@juleskim.dev">hello@juleskim.dev <ArrowUpRight size={18} /></a>
-            <a aria-label="GitHub profile" href="https://github.com" target="_blank" rel="noreferrer" className="social-link"><CodeXml size={18} /></a>
-            <a aria-label="LinkedIn profile" href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-link"><Network size={18} /></a>
+            <a className="contact-link" href="mailto:pranavsayshii@gmail.com">pranavsayshii@gmail.com <ArrowUpRight size={18} /></a>
+            <a aria-label="GitHub profile" href="https://github.com/visionEye0" target="_blank" rel="noreferrer" className="social-link"><CodeXml size={18} /></a>
+            <a aria-label="LinkedIn profile" href="https://linkedin.com/in/happy-coder" target="_blank" rel="noreferrer" className="social-link"><Network size={18} /></a>
           </div>
         </div>
       </section>
 
       <footer className="flex flex-col gap-3 px-5 py-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 md:px-12">
-        <span>Jules Kim / Developer</span>
+        <span>Pranav Krishna / Full-Stack Developer</span>
         <span>Built with intent, 2025</span>
       </footer>
     </main>
