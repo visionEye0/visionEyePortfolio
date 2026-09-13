@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Jules Kim - Developer",
-  description: "Jules Kim, independent developer building expressive digital experiences.",
+  title: "Pranav Krishna - Developer",
+  description: "Pranav Krishna, independent developer building expressive digital experiences.",
   themeColor: "#101112",
 };
 
