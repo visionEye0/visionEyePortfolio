@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
 /**
@@ -11,21 +13,30 @@ export function useReveal<T extends HTMLElement>() {
     const root = ref.current;
     if (!root) return;
 
-    const elements = root.querySelectorAll<HTMLElement>(".reveal");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
+    let observer: IntersectionObserver;
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    // Small delay to ensure all child Client Components are fully mounted in Next.js
+    const timer = setTimeout(() => {
+      const elements = root.querySelectorAll<HTMLElement>(".reveal");
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      );
+
+      elements.forEach((el) => observer.observe(el));
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (observer) observer.disconnect();
+    };
   }, []);
 
   return ref;

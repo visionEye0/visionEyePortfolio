@@ -1,3 +1,5 @@
+"use client";
+
 import { projects } from "../data/portfolio";
 
 export default function Projects() {

@@ -1,3 +1,5 @@
+"use client";
+
 import { marqueeItems } from "../data/portfolio";
 
 export default function Marquee() {

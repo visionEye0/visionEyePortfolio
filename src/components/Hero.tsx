@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import GithubActivity from "./GithubActivity";
 
 const roles = [
   "Full-Stack Developer",
@@ -34,7 +37,9 @@ export default function Hero() {
 
   return (
     <section id="top" className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 pb-16">
-      <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-8">
+        {/* Left Column */}
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
         {/* Availability badge */}
         <div className="mb-8 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-zinc-300 backdrop-blur">
           <span className="relative flex h-2 w-2">
@@ -62,7 +67,7 @@ export default function Hero() {
         </p>
 
         {/* CTA buttons */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
           <a
             href="#work"
             className="group relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-xl shadow-violet-500/30 transition-all hover:shadow-violet-500/50 hover:-translate-y-0.5"
@@ -87,13 +92,19 @@ export default function Hero() {
             { value: "10+", label: "Projects Shipped" },
             { value: "AI", label: "Workflows Built" },
           ].map((s) => (
-            <div key={s.label} className="flex flex-col items-center">
+            <div key={s.label} className="flex flex-col items-center lg:items-start">
               <span className="font-display text-3xl font-extrabold text-white sm:text-4xl">
                 {s.value}
               </span>
               <span className="mt-1 text-xs text-zinc-500 sm:text-sm">{s.label}</span>
             </div>
           ))}
+        </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="flex w-full justify-center lg:justify-end">
+          <GithubActivity username="visionEye0" />
         </div>
       </div>
 
