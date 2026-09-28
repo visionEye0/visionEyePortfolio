@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const profile = profileRes.ok ? await profileRes.json() : null;
 
     // 2. Fetch Contributions Calendar via GraphQL
-    let contributions = [];
+    let contributions: any[] = [];
     if (token) {
       const query = `
         query($userName:String!) {
