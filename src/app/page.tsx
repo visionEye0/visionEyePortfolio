@@ -11,10 +11,29 @@ import About from "../components/About";
 import Contact from "../components/Contact";
 import { useReveal } from "../hooks/useReveal";
 import { useSpotlight } from "../hooks/useSpotlight";
+import { useEffect } from "react";
 
 export default function App() {
   const wrapperRef = useReveal<HTMLDivElement>();
   useSpotlight();
+
+  // Smooth scroll for anchor links only — replaces CSS scroll-behavior:smooth
+  // which was causing jank by forcing interpolated scroll on ALL scroll events
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!anchor) return;
+      const id = anchor.getAttribute("href");
+      if (!id || id === "#") return;
+      const el = document.querySelector(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
 
   return (
     <div ref={wrapperRef} className="noise relative min-h-screen">
@@ -23,11 +42,21 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
-        <Projects />
-        <Skills />
-        <About />
-        <Contact />
+        <div className="cv-section">
+          <Marquee />
+        </div>
+        <div className="cv-section">
+          <Projects />
+        </div>
+        <div className="cv-section">
+          <Skills />
+        </div>
+        <div className="cv-section">
+          <About />
+        </div>
+        <div className="cv-section">
+          <Contact />
+        </div>
       </main>
     </div>
   );

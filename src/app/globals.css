@@ -15,29 +15,39 @@
   --animate-blob: blob 20s ease-in-out infinite;
 
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
   }
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-16px); }
   }
   @keyframes blob {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(40px, -60px) scale(1.15); }
-    66% { transform: translate(-30px, 30px) scale(0.9); }
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(40px, -60px, 0) scale(1.15); }
+    66% { transform: translate3d(-30px, 30px, 0) scale(0.9); }
   }
 }
 
-html {
-  scroll-behavior: smooth;
+.animate-blob {
+  will-change: transform;
+  contain: layout style paint;
+  backface-visibility: hidden;
 }
+
+/* scroll-behavior:smooth removed — it forces the browser to interpolate
+   scroll positions which compounds with heavy compositing layers.
+   Smooth scroll for anchor links is handled via JS instead. */
 
 body {
   background-color: #06060a;
   color: #e7e7f0;
   font-family: var(--font-sans);
   overflow-x: hidden;
+  /* Force GPU rasterization for the entire page */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
@@ -57,15 +67,19 @@ body {
   border-radius: 999px;
 }
 
-/* Grain / noise overlay */
+/* Grain / noise overlay — composited once on its own isolated layer.
+   contain:strict prevents this from invalidating anything below it. */
 .noise::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 50;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  transform: translateZ(0);
+  contain: strict;
+  isolation: isolate;
 }
 
 /* Gradient text */
@@ -76,23 +90,47 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Glass card */
+/* Glass card — backdrop-filter:blur is the single most expensive CSS property
+   during scroll because the browser must re-sample and re-blur every frame.
+   Replaced with a layered solid background that mimics the frosted look
+   without any per-frame compositing cost. */
 .glass {
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)),
+    rgba(12, 12, 20, 0.82);
   border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06),
+              0 0 40px -10px rgba(124, 58, 237, 0.08);
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
-/* Reveal-on-scroll */
+/* Reveal-on-scroll — uses translate3d to keep transforms on the GPU
+   compositor thread. will-change is set initially and removed by JS
+   after the animation completes. */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 32px, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
+}
+
+/* Skill bar fill — triggers when parent .reveal becomes visible.
+   Uses scale3d to guarantee GPU compositor path. */
+.skill-fill {
+  transform: scale3d(0, 1, 1);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.reveal.is-visible .skill-fill {
+  transform: scale3d(1, 1, 1);
 }
 
 /* Animated gradient border */
@@ -112,7 +150,7 @@ body {
   pointer-events: none;
 }
 
-/* Spotlight card hover */
+/* Spotlight card hover — isolated layer to avoid repaints */
 .spotlight {
   position: relative;
   overflow: hidden;
@@ -128,6 +166,8 @@ body {
   );
   opacity: 0;
   transition: opacity 0.4s;
+  will-change: opacity;
+  pointer-events: none;
 }
 .spotlight:hover::after {
   opacity: 1;
@@ -151,7 +191,8 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* Retained Hero Image */
+/* Retained Hero Image — reduced scale range and contained to prevent
+   scroll-frame invalidation */
 .hero-image {
   position: absolute;
   inset: -4%;
@@ -164,8 +205,46 @@ body {
   background-size: cover;
   animation: drift 18s ease-in-out infinite alternate;
   pointer-events: none;
+  will-change: transform;
+  contain: layout paint;
+  backface-visibility: hidden;
 }
 @keyframes drift {
-  from { transform: scale(1) translate3d(-1%, 0, 0); }
-  to { transform: scale(1.08) translate3d(1.5%, -1%, 0); }
+  from { transform: scale(1) translate3d(-0.5%, 0, 0); }
+  to { transform: scale(1.04) translate3d(0.8%, -0.5%, 0); }
+}
+
+/* ── content-visibility: auto ──
+   Sections below the fold skip layout, paint, and compositing entirely
+   until they approach the viewport. contain-intrinsic-size gives the
+   browser a size estimate so scrollbar height stays stable. */
+.cv-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+/* ── Marquee GPU layer ── */
+.marquee-track {
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: layout style;
+}
+
+/* ── prefers-reduced-motion ──
+   Kill ALL animations and transitions for users who opt out.
+   Also eliminates any remaining compositor cost. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .skill-fill {
+    transform: scale3d(1, 1, 1);
+  }
 }
