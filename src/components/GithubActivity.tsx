@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import { Terminal, Wifi, Code, Mail, GitMerge, GitPullRequest } from "lucide-react";
 
 const Twitter = (props: any) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>;
@@ -158,9 +159,11 @@ export default function GithubActivity({ username = "pranavkrishna" }: { usernam
 
         {/* Profile Card */}
         <div className="mb-8 flex items-center gap-4">
-          <img
+          <Image
             src={profile?.avatar_url || "https://github.com/shadcn.png"}
             alt="Avatar"
+            width={48}
+            height={48}
             className="h-12 w-12 rounded-lg opacity-80 grayscale transition-all hover:grayscale-0"
           />
           <div>
@@ -204,7 +207,7 @@ export default function GithubActivity({ username = "pranavkrishna" }: { usernam
                   key={i}
                   onClick={() => setSelectedDay(day)}
                   title={`${day.count} commits on ${day.date}`}
-                  className={`h-3.5 w-3.5 rounded-[2px] transition-all hover:scale-125 hover:z-10 hover:ring-1 hover:ring-white/50 ${bgClass}`}
+                  className={`h-3.5 w-3.5 rounded-[2px] transition-transform duration-150 hover:scale-125 hover:z-10 ${bgClass}`}
                 />
               );
             })}

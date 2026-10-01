@@ -12,7 +12,7 @@ export default function Marquee() {
       <div
         className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-ink to-transparent z-10"
       />
-      <div className="flex w-max animate-marquee gap-12">
+      <div className="marquee-track flex w-max animate-marquee gap-12">
         {items.map((item, i) => (
           <span
             key={i}

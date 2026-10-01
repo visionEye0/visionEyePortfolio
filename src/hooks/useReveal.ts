@@ -24,6 +24,11 @@ export function useReveal<T extends HTMLElement>() {
             if (entry.isIntersecting) {
               entry.target.classList.add("is-visible");
               observer.unobserve(entry.target);
+
+              // Free the GPU layer after the transition finishes (600ms + buffer)
+              setTimeout(() => {
+                (entry.target as HTMLElement).style.willChange = "auto";
+              }, 800);
             }
           });
         },
